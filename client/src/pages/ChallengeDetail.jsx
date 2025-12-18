@@ -83,42 +83,49 @@ export default function ChallengeDetail() {
     setUploading(true)
     setUploadResult(null)
 
-    const formData = new FormData()
-    formData.append('proof', file)
-
-    try {
-      const token = localStorage.getItem('token')
-      const res = await fetch(`${API_URL}/api/challenges/${id}/submit`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData
-      })
-
-      const data = await res.json()
+    // Convert file to base64
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const base64Image = reader.result // This is a data URL like "data:image/jpeg;base64,..."
       
-      if (res.ok) {
-        setUploadResult({
-          success: data.verified,
-          message: data.message,
-          details: data.details
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch(`${API_URL}/api/challenges/${id}/submit`, {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ image: base64Image, type: 'ai' })
         })
-        fetchSubmissions()
-        fetchLeaderboard()
-        fetchChallenge()
-      } else {
+
+        const data = await res.json()
+        
+        if (res.ok) {
+          setUploadResult({
+            success: data.verified,
+            message: data.message,
+            details: data.details
+          })
+          fetchSubmissions()
+          fetchLeaderboard()
+          fetchChallenge()
+        } else {
+          setUploadResult({
+            success: false,
+            message: data.error || 'Upload failed'
+          })
+        }
+      } catch (err) {
         setUploadResult({
           success: false,
-          message: data.error || 'Upload failed'
+          message: 'Failed to upload proof'
         })
+      } finally {
+        setUploading(false)
       }
-    } catch (err) {
-      setUploadResult({
-        success: false,
-        message: 'Failed to upload proof'
-      })
-    } finally {
-      setUploading(false)
     }
+    reader.readAsDataURL(file)
   }
 
   const handleMarkComplete = async () => {
