@@ -33,7 +33,7 @@ let gemini = null
 if (GEMINI_API_KEY) {
   const { GoogleGenerativeAI } = await import('@google/generative-ai')
   const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-  gemini = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  gemini = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-8b' })
 }
 
 // Database setup
