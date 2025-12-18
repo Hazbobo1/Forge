@@ -672,7 +672,10 @@ app.post('/api/challenges/:id/submit', authenticate, async (req, res) => {
       message = 'Progress marked successfully!'
     } else if (image && gemini) {
       try {
+        console.log('Starting AI verification...')
+        console.log('Image length:', image?.length)
         const proofPrompt = getProofPrompt(challenge.proof_type, challenge.name)
+        console.log('Proof type:', challenge.proof_type)
         
         // Extract base64 data from data URL
         const base64Match = image.match(/^data:image\/(\w+);base64,(.+)$/)
@@ -695,10 +698,13 @@ Respond with ONLY a JSON object (no markdown, no code blocks) containing:
 Be encouraging but accurate. If you can't verify, explain what would help.`
 
         // Retry logic for rate limits
+        console.log('Calling Gemini API with mimeType:', mimeType)
+        console.log('Base64 data length:', base64Data?.length)
         let result
         let retries = 3
         while (retries > 0) {
           try {
+            console.log('Attempting Gemini call, retries left:', retries)
             result = await gemini.generateContent([
               prompt,
               {
