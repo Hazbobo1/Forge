@@ -12,9 +12,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const app = express()
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const DB_PATH = join(__dirname, 'challenge.db')
 
 // VAPID keys for push notifications (generate your own in production)
@@ -29,10 +29,11 @@ webpush.setVapidDetails(
 )
 
 // Initialize OpenAI dynamically (optional)
-let openai = null
-if (OPENAI_API_KEY) {
-  const { default: OpenAI } = await import('openai')
-  openai = new OpenAI({ apiKey: OPENAI_API_KEY })
+let gemini = null
+if (GEMINI_API_KEY) {
+  const { GoogleGenerativeAI } = await import('@google/generative-ai')
+  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+  gemini = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 }
 
 // Database setup
@@ -669,37 +670,41 @@ app.post('/api/challenges/:id/submit', authenticate, async (req, res) => {
     if (type === 'self' || challenge.policing_type === 'self') {
       verified = true
       message = 'Progress marked successfully!'
-    } else if (image && openai) {
+    } else if (image && gemini) {
       try {
         const proofPrompt = getProofPrompt(challenge.proof_type, challenge.name)
         
-        const response = await openai.chat.completions.create({
-          model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: `${proofPrompt}
+        // Extract base64 data from data URL
+        const base64Match = image.match(/^data:image\/(\w+);base64,(.+)$/)
+        if (!base64Match) {
+          throw new Error('Invalid image format')
+        }
+        const mimeType = `image/${base64Match[1]}`
+        const base64Data = base64Match[2]
+        
+        const prompt = `${proofPrompt}
 
-Respond with a JSON object containing:
+Analyze this image for the challenge "${challenge.name}".
+
+Respond with ONLY a JSON object (no markdown, no code blocks) containing:
 - verified: boolean (true if the proof is valid for this challenge)
 - message: string (friendly explanation of your decision)
-- details: object with any extracted data
+- details: object with any extracted data (distance, time, date, location, etc.)
 - confidence: number (0-100, how confident you are)
 
 Be encouraging but accurate. If you can't verify, explain what would help.`
-            },
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: `Please verify this proof submission for the challenge "${challenge.name}":` },
-                { type: 'image_url', image_url: { url: image } }
-              ]
-            }
-          ],
-          max_tokens: 800
-        })
 
-        const content = response.choices[0].message.content
+        const result = await gemini.generateContent([
+          prompt,
+          {
+            inlineData: {
+              mimeType,
+              data: base64Data
+            }
+          }
+        ])
+
+        const content = result.response.text()
         
         try {
           const jsonMatch = content.match(/\{[\s\S]*\}/)
@@ -724,7 +729,7 @@ Be encouraging but accurate. If you can't verify, explain what would help.`
         message = 'AI verification temporarily unavailable. Marking as pending.'
         verified = false
       }
-    } else if (image && !openai) {
+    } else if (image && !gemini) {
       verified = true
       message = 'Proof submitted! (AI verification not configured)'
     } else {
@@ -1468,7 +1473,7 @@ app.post('/api/cron/daily-reminders', async (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`🔥 Forge API server running on http://localhost:${PORT}`)
-  if (!OPENAI_API_KEY) {
-    console.log('⚠️  No OPENAI_API_KEY set - AI verification will auto-approve submissions')
+  if (!GEMINI_API_KEY) {
+    console.log('⚠️  No GEMINI_API_KEY set - AI verification will auto-approve submissions')
   }
 })

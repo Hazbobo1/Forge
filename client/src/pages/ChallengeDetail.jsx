@@ -49,7 +49,7 @@ export default function ChallengeDetail() {
   const fetchSubmissions = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/challenges/${id}/submissions`, {
+      const res = await fetch(`${API_URL}/api/challenges/${id}/submissions`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       const data = await res.json()
@@ -64,7 +64,7 @@ export default function ChallengeDetail() {
   const fetchLeaderboard = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/challenges/${id}/leaderboard`, {
+      const res = await fetch(`${API_URL}/api/challenges/${id}/leaderboard`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       const data = await res.json()
@@ -88,7 +88,7 @@ export default function ChallengeDetail() {
 
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/challenges/${id}/submit`, {
+      const res = await fetch(`${API_URL}/api/challenges/${id}/submit`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -124,7 +124,7 @@ export default function ChallengeDetail() {
   const handleMarkComplete = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/challenges/${id}/submit`, {
+      const res = await fetch(`${API_URL}/api/challenges/${id}/submit`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -162,7 +162,7 @@ export default function ChallengeDetail() {
 
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/challenges/${id}/settle`, {
+      const res = await fetch(`${API_URL}/api/challenges/${id}/settle`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       })

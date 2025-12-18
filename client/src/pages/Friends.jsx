@@ -50,7 +50,7 @@ export default function Friends() {
   const searchUsers = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
+      const res = await fetch(`${API_URL}/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (res.ok) {
@@ -95,7 +95,7 @@ export default function Friends() {
     try {
       const token = localStorage.getItem('token')
       const endpoint = accept ? 'accept' : 'decline'
-      const res = await fetch(`/api/friends/${endpoint}/${requestId}`, {
+      const res = await fetch(`${API_URL}/api/friends/${endpoint}/${requestId}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -113,7 +113,7 @@ export default function Friends() {
     
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/friends/${friendId}`, {
+      const res = await fetch(`${API_URL}/api/friends/${friendId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })
