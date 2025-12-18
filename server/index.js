@@ -33,7 +33,7 @@ let gemini = null
 if (GEMINI_API_KEY) {
   const { GoogleGenerativeAI } = await import('@google/generative-ai')
   const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-  gemini = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-8b' })
+  gemini = genAI.getGenerativeModel({ model: 'gemini-pro-vision' })
 }
 
 // Database setup
@@ -654,12 +654,17 @@ app.post('/api/challenges/:id/submit', authenticate, async (req, res) => {
 
     const today = new Date().toISOString().split('T')[0]
     const existingSubmission = dbGet(`
-      SELECT id FROM submissions 
+      SELECT id, verified FROM submissions 
       WHERE challenge_id = ? AND user_id = ? AND DATE(created_at) = ?
     `, [challengeId, req.user.id, today])
 
-    if (existingSubmission) {
+    if (existingSubmission && existingSubmission.verified) {
       return res.status(400).json({ error: 'Already submitted for today' })
+    }
+    
+    // Delete unverified submission so user can retry
+    if (existingSubmission && !existingSubmission.verified) {
+      dbRun('DELETE FROM submissions WHERE id = ?', [existingSubmission.id])
     }
 
     let verified = false
