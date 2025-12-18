@@ -303,28 +303,28 @@ export default function CreateChallenge() {
 
               <div className="space-y-4 mb-6">
                 <label 
-                  className={`card cursor-pointer transition-all ${
+                  className={`block p-4 rounded-xl border cursor-pointer transition-all ${
                     formData.policingType === 'self' 
                       ? 'border-ember-500 bg-ember-500/10' 
-                      : 'hover:border-midnight-600'
+                      : 'border-midnight-700 hover:border-midnight-600 bg-midnight-900/50'
                   }`}
                   onClick={() => setFormData(prev => ({ ...prev, policingType: 'self' }))}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                       formData.policingType === 'self' 
                         ? 'bg-ember-500' 
                         : 'bg-midnight-800'
                     }`}>
                       <UserCheck className="w-6 h-6 text-white" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="font-bold mb-1">Self-Policed</div>
                       <p className="text-midnight-400 text-sm">
                         Participants mark their own progress. Trust-based system for friends.
                       </p>
                     </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                       formData.policingType === 'self' 
                         ? 'border-ember-500 bg-ember-500' 
                         : 'border-midnight-600'
@@ -337,23 +337,23 @@ export default function CreateChallenge() {
                 </label>
 
                 <label 
-                  className={`card cursor-pointer transition-all ${
+                  className={`block p-4 rounded-xl border cursor-pointer transition-all ${
                     formData.policingType === 'ai' 
                       ? 'border-ember-500 bg-ember-500/10' 
-                      : 'hover:border-midnight-600'
+                      : 'border-midnight-700 hover:border-midnight-600 bg-midnight-900/50'
                   }`}
                   onClick={() => setFormData(prev => ({ ...prev, policingType: 'ai' }))}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                       formData.policingType === 'ai' 
                         ? 'bg-ember-500' 
                         : 'bg-midnight-800'
                     }`}>
                       <Sparkles className="w-6 h-6 text-white" />
                     </div>
-                    <div className="flex-1">
-                      <div className="font-bold mb-1 flex items-center gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold mb-1 flex items-center gap-2 flex-wrap">
                         AI Verified
                         <span className="badge-ember text-xs">Recommended</span>
                       </div>
@@ -361,7 +361,7 @@ export default function CreateChallenge() {
                         Upload proof and AI will verify it. Screenshots, photos, anything.
                       </p>
                     </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                       formData.policingType === 'ai' 
                         ? 'border-ember-500 bg-ember-500' 
                         : 'border-midnight-600'

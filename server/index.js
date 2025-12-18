@@ -627,7 +627,7 @@ app.get('/api/challenges/:id/submissions', authenticate, (req, res) => {
   try {
     const challengeId = parseInt(req.params.id)
     const submissions = dbAll(`
-      SELECT s.*, u.username
+      SELECT s.*, s.created_at as submitted_at, u.username
       FROM submissions s
       JOIN users u ON s.user_id = u.id
       WHERE s.challenge_id = ?
