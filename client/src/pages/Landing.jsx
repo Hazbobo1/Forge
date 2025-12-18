@@ -57,19 +57,6 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-12 mt-20 animate-fade-in delay-300">
-            {[
-              { value: '10K+', label: 'Challenges Completed' },
-              { value: '94%', label: 'Success Rate' },
-              { value: '50K+', label: 'Active Users' },
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl font-bold font-display gradient-text">{stat.value}</div>
-                <div className="text-midnight-400 text-sm mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </header>
 
@@ -214,7 +201,7 @@ export default function Landing() {
                 Ready to Start Winning?
               </h2>
               <p className="text-midnight-300 text-lg mb-8 max-w-xl mx-auto">
-                Join thousands of people who are crushing their goals with friends. 
+                Start crushing your goals with friends. 
                 Your next victory starts here.
               </p>
               <Link to="/signup" className="btn-primary text-lg px-10 py-4 inline-flex items-center gap-2">
