@@ -15,7 +15,9 @@ const app = express()
 const PORT = process.env.PORT || 3001
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
-const DB_PATH = join(__dirname, 'challenge.db')
+// Use /data for Railway volume, fallback to local for dev
+const DB_PATH = process.env.DATABASE_PATH || join(__dirname, 'challenge.db')
+console.log('Database path:', DB_PATH)
 
 // VAPID keys for push notifications (generate your own in production)
 const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U'
