@@ -27,7 +27,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem('token')
       // Fetch by ID if id is provided, otherwise by username
-      const endpoint = id ? `/api/users/id/${id}` : `/api/users/${username}`
+      const endpoint = id ? `${API_URL}/api/users/id/${id}` : `${API_URL}/api/users/${username}`
       const res = await fetch(endpoint, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
