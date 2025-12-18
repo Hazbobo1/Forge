@@ -411,7 +411,7 @@ app.post('/api/auth/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
     const result = dbRun('INSERT INTO users (username, email, password, points) VALUES (?, ?, ?, ?)', [username, email, hashedPassword, STARTING_POINTS])
 
-    const userId = result.lastInsertRowid
+    const userId = Number(result.lastInsertRowid)
 
     // Log the signup bonus transaction
     logPointTransaction(userId, STARTING_POINTS, 'signup_bonus', 'Welcome bonus for joining Forge!')
@@ -509,7 +509,7 @@ app.post('/api/challenges', authenticate, (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [name, description, frequency, frequencyCount || 1, duration, forfeit, wagerAmount, policingType, proofType || 'any', req.user.id, endDate.toISOString()])
 
-    const challengeId = result.lastInsertRowid
+    const challengeId = Number(result.lastInsertRowid)
 
     // Deduct points and record transaction if there's a wager
     if (wagerAmount > 0) {
@@ -540,6 +540,7 @@ app.post('/api/challenges', authenticate, (req, res) => {
       }
     }
 
+    console.log('Challenge created with ID:', challengeId, typeof challengeId)
     res.json({ id: challengeId, message: 'Challenge created successfully' })
   } catch (err) {
     console.error('Create challenge error:', err)
