@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Database (will be recreated on first run)
+server/challenge.db
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Build outputs
+client/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
