@@ -4,6 +4,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../App'
 import { useState, useEffect } from 'react'
+import { API_URL } from '../api'
 
 export default function Navbar() {
   const { user, logout } = useAuth()
@@ -21,7 +22,7 @@ export default function Navbar() {
   const fetchPoints = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/points', { headers: { 'Authorization': `Bearer ${token}` } })
+      const res = await fetch(`${API_URL}/api/points`, { headers: { 'Authorization': `Bearer ${token}` } })
       if (res.ok) {
         const data = await res.json()
         setPoints(data.points)
@@ -35,8 +36,8 @@ export default function Navbar() {
     try {
       const token = localStorage.getItem('token')
       const [invitesRes, requestsRes] = await Promise.all([
-        fetch('/api/invites', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('/api/friends/requests', { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`${API_URL}/api/invites`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_URL}/api/friends/requests`, { headers: { 'Authorization': `Bearer ${token}` } })
       ])
 
       if (invitesRes.ok) {

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../App'
 import Navbar from '../components/Navbar'
+import { API_URL } from '../api'
 
 export default function Profile() {
   const { username, id } = useParams()
@@ -46,7 +47,7 @@ export default function Profile() {
   const saveBio = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/users/profile', {
+      const res = await fetch(`${API_URL}/api/users/profile`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export default function Profile() {
   const sendFriendRequest = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/friends/request', {
+      const res = await fetch(`${API_URL}/api/friends/request`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

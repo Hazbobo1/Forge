@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Flame, ArrowRight, Eye, EyeOff, AlertCircle, Check } from 'lucide-react'
 import { useAuth } from '../App'
+import { API_URL } from '../api'
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -43,7 +44,7 @@ export default function Signup() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

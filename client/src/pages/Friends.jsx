@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../App'
 import Navbar from '../components/Navbar'
+import { API_URL } from '../api'
 
 export default function Friends() {
   const { user } = useAuth()
@@ -33,8 +34,8 @@ export default function Friends() {
     try {
       const token = localStorage.getItem('token')
       const [friendsRes, requestsRes] = await Promise.all([
-        fetch('/api/friends', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('/api/friends/requests', { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`${API_URL}/api/friends`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_URL}/api/friends/requests`, { headers: { 'Authorization': `Bearer ${token}` } })
       ])
 
       if (friendsRes.ok) setFriends(await friendsRes.json())
@@ -66,7 +67,7 @@ export default function Friends() {
   const sendFriendRequest = async (username) => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/friends/request', {
+      const res = await fetch(`${API_URL}/api/friends/request`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

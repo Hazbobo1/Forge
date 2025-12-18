@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../App'
 import Navbar from '../components/Navbar'
+import { API_URL } from '../api'
 
 export default function Dashboard() {
   const { user } = useAuth()
@@ -22,10 +23,10 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem('token')
       const [challengesRes, invitesRes] = await Promise.all([
-        fetch('/api/challenges', {
+        fetch(`${API_URL}/api/challenges`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('/api/invites', {
+        fetch(`${API_URL}/api/invites`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ])
@@ -49,7 +50,7 @@ export default function Dashboard() {
   const handleInviteResponse = async (inviteId, accept) => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/invites/${inviteId}/${accept ? 'accept' : 'decline'}`, {
+      const res = await fetch(`${API_URL}/api/invites/${inviteId}/${accept ? 'accept' : 'decline'}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       })

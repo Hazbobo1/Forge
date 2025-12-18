@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../App'
 import Navbar from '../components/Navbar'
+import { API_URL } from '../api'
 
 const activityIcons = {
   joined: Zap,
@@ -46,7 +47,7 @@ export default function Feed() {
   const fetchFeed = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/feed', {
+      const res = await fetch(`${API_URL}/api/feed`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
 

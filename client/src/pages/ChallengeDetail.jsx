@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import { useAuth } from '../App'
+import { API_URL } from '../api'
 
 export default function ChallengeDetail() {
   const { id } = useParams()
@@ -31,7 +32,7 @@ export default function ChallengeDetail() {
   const fetchChallenge = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`/api/challenges/${id}`, {
+      const res = await fetch(`${API_URL}/api/challenges/${id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       const data = await res.json()

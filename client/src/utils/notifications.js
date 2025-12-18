@@ -1,4 +1,5 @@
 // Push notification utilities
+import { API_URL } from '../api'
 
 export async function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
@@ -19,7 +20,7 @@ export async function subscribeToPush() {
     const registration = await navigator.serviceWorker.ready
     
     // Get VAPID public key from server
-    const response = await fetch('/api/push/vapid-key')
+    const response = await fetch(`${API_URL}/api/push/vapid-key`)
     const { publicKey } = await response.json()
 
     // Subscribe to push
@@ -30,7 +31,7 @@ export async function subscribeToPush() {
 
     // Send subscription to server
     const token = localStorage.getItem('token')
-    await fetch('/api/push/subscribe', {
+    await fetch(`${API_URL}/api/push/subscribe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ export async function unsubscribeFromPush() {
     }
 
     const token = localStorage.getItem('token')
-    await fetch('/api/push/unsubscribe', {
+    await fetch(`${API_URL}/api/push/unsubscribe`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`

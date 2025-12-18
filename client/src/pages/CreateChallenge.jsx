@@ -7,6 +7,7 @@ import {
   ImageIcon, Coins
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
+import { API_URL } from '../api'
 
 const proofTypes = [
   { id: 'strava', name: 'Strava/Fitness App', icon: Target, description: 'Screenshots from running/cycling apps' },
@@ -46,7 +47,7 @@ export default function CreateChallenge() {
   const fetchUserPoints = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/points', {
+      const res = await fetch(`${API_URL}/api/points`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (res.ok) {
@@ -87,7 +88,7 @@ export default function CreateChallenge() {
 
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/challenges', {
+      const res = await fetch(`${API_URL}/api/challenges`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
