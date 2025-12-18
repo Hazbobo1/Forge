@@ -694,15 +694,35 @@ Respond with ONLY a JSON object (no markdown, no code blocks) containing:
 
 Be encouraging but accurate. If you can't verify, explain what would help.`
 
-        const result = await gemini.generateContent([
-          prompt,
-          {
-            inlineData: {
-              mimeType,
-              data: base64Data
+        // Retry logic for rate limits
+        let result
+        let retries = 3
+        while (retries > 0) {
+          try {
+            result = await gemini.generateContent([
+              prompt,
+              {
+                inlineData: {
+                  mimeType,
+                  data: base64Data
+                }
+              }
+            ])
+            break // Success, exit loop
+          } catch (retryErr) {
+            if (retryErr.message?.includes('429') || retryErr.message?.includes('quota') || retryErr.status === 429) {
+              retries--
+              if (retries > 0) {
+                console.log(`Rate limited, waiting 30s... (${retries} retries left)`)
+                await new Promise(r => setTimeout(r, 30000)) // Wait 30 seconds
+              } else {
+                throw retryErr
+              }
+            } else {
+              throw retryErr
             }
           }
-        ])
+        }
 
         const content = result.response.text()
         
