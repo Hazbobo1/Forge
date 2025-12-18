@@ -33,7 +33,7 @@ let gemini = null
 if (GEMINI_API_KEY) {
   const { GoogleGenerativeAI } = await import('@google/generative-ai')
   const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-  gemini = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+  gemini = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 }
 
 // Database setup
@@ -725,7 +725,8 @@ Be encouraging but accurate. If you can't verify, explain what would help.`
           aiResponse = content
         }
       } catch (aiErr) {
-        console.error('AI verification error:', aiErr)
+        console.error('AI verification error:', aiErr.message || aiErr)
+        console.error('Full error:', JSON.stringify(aiErr, null, 2))
         message = 'AI verification temporarily unavailable. Marking as pending.'
         verified = false
       }
